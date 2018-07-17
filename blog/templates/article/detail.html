@@ -1,0 +1,29 @@
+{% extends 'article/base.html' %}
+{% load static from staticfiles %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+    <script type="text/javascript" src="{% static 'js/zooming.min.js' %}"></script> {# 图片放大缩小#}
+    <script>
+        $(function () {
+            $('.detail_content img').addClass('img-responsive').attr("data-action","zoom");
+        })
+    </script>
+{% endblock head%}
+
+{% block content %}
+    <article>
+        <div class="container center_content">
+            <div class="stitle">
+                <h2 data-scroll-reveal="enter right and move 10px over 1s">{{ article.title }}</h2>
+                <span data-scroll-reveal="enter bottom and move 20px over 1s after 0.5s">{{ article.createTime|date:'Y-m-d H:i:s' }}</span>
+            </div>
+            <h3 data-scroll-reveal="enter right and move 20px over 1s">
+                <span>您现在的位置是&gt;</span>
+                <a href="/">首页</a>&gt;
+                <a href="#">学无止境</a>&gt;
+                <a href="/detail/{{ article.id }}">{{ article.title }}</a>
+            </h3>
+            <div class="detail_content">{{ article.content|safe }}</div>
+        </div>
+    </article>
+{% endblock content%}

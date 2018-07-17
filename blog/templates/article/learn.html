@@ -1,0 +1,136 @@
+{% extends 'article/base.html' %}
+{% load static from staticfiles %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/learn.css' %}">
+    <script type="text/javascript" src="{% static 'js/learn.js' %}"></script>
+    <script>
+        $(function () {
+            $.ajaxSetup({cache:false});
+            CategoryAjax(); //为所有的类别绑定点击事件
+            go_to_page(1,'{{ sort_name }}');      //默认开始进入第一页
+            function CategoryAjax(){        //为所有的类别绑定点击事件
+                $('.sort li').click(function () {
+                    sort_name=$(this).text();
+                    go_to_page(1,sort_name);
+                    page_click(sort_name);
+                })
+            }
+            //选择所有的页码绑定点击事件
+            function page_click(sort_name='全部'){
+                $('.pages a:not(":first,:last")').click(function () {
+                    page_id=$(this).text();     //page_id为接下来要请求的页码号
+                    go_to_page(page_id,sort_name);
+                });
+            }
+            function go_to_page(page_id,sort_name='全部') {      //ajax刷新当前页面文章   page_id为接下来要请求的页码号
+                $.ajax({
+                    type:'GET',
+                    data:{'page_id':page_id,'sort_name':sort_name},
+                    url:'{% url 'article:pageAjax' %}',
+                    datatype:JSON,      //希望返回Json格式的数据
+                    success:function (data) {
+                        f1(data);     //处理返回后的数据
+                    },
+                    error:function () {
+                        console.log('ajax刷新分页数据失败！');
+                    }
+                })
+            }
+
+            function delHtmlTag(str){   //去掉html文本中所有的标签和空格还有回车，只保留数据,然后截取前95个字符
+                return $.trim(str.replace(/<[^>]+>/g,"").replace(/[\r\n]/g," ")).substr(0,95);
+            }
+
+            function f1(data) {   //处理返回后的数据    data为字符串型
+                data = $.parseJSON(data);    //将字符串型转化为object
+                //刷新文章
+                $('.tmtimeline li').remove();
+                for (var i = 0; i < data.result.length; i++) {
+
+                    $('.tmtimeline').append('<li><div class="row"><div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"> <time class="tmtime"> <span>'
+                        +data.result[i][0]+
+                        '</span> <span>'
+                        +data.result[i][1]+
+                        '</span> </time> <div class="tmicon"></div> </div> <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" data-scroll-reveal="enter right and move 50px over 1.2s"> <div class="tmlabel"> <h3>'
+                        +data.result[i][2]+
+                        '</h3> <div class="row"> <img src="/upload/'
+                        +data.result[i][3]+
+                        '" class="col-xs-4 img-responsive blogpic"> <div class="col-xs-8">'
+                        +delHtmlTag(data.result[i][4])+
+                        '...</div> </div> <a href="/detail/'
+                        +data.result[i][5]+
+                        '/" class="readmore">阅读全文&gt;&gt;</a> </div> </div> </div> </li>'
+                    );
+                }
+                //刷新页码
+                $('.pages a:not(":first,:last")').remove();
+                if(parseInt(data.num_pages) <= 5) {     //如果总页码数小于等于5
+                    for(var i=1;i<=parseInt(data.num_pages);i++){
+                        $('.pages a:last').before('<a href="javascript:;">' +i+ '</a>');
+                    }
+                }else if(parseInt(data.page_id)<=3){        //如果当前页码数小于等于3,显示前五页
+                    for(var i=1;i<=5;i++){
+                        $('.pages a:last').before('<a href="javascript:;">' +i+ '</a>');
+                    }
+                }else if(parseInt(data.page_id)>parseInt(data.num_pages)-2){    //当前页后面不足两页时
+                    for(var i=0;i<5;i++){
+                        $('.pages a:first').after('<a href="javascript:;">' +(parseInt(data.num_pages)-i)+ '</a>');
+                    }
+                }else{
+                    for(var i=-2;i<=2;i++){
+                        $('.pages a:last').before('<a href="javascript:;">' +(parseInt(data.page_id)+i)+ '</a>');
+                    }
+                }
+
+                $('.pages a:not(":first,:last")').each(function () {    //为当前页加上active
+                    if($(this).text()==data.page_id)
+                        $(this).addClass('active');
+                });
+
+                page_click(data.sort_name);   //为刷新后的页码绑定点击事件
+                $('.pages a:first').unbind("click").click(function () {
+                    if(parseInt(data.page_id)<=1)
+                    {
+                        alert('已经是第一页');
+                    }
+                    else
+                    {
+                        go_to_page(parseInt(data.page_id)-1,data.sort_name);
+                    }
+                });
+                $('.pages a:last').unbind("click").click(function () {
+                    if(parseInt(data.page_id)>=parseInt(data.num_pages))
+                        alert('已经是最后一页');
+                    else
+                        go_to_page(parseInt(data.page_id)+1,data.sort_name);
+                });
+                scrollReveal.init();    //使用js动态写入的html,必须init初始化才能正常使用scrollReveal动画效果
+            }
+        })
+    </script>
+{% endblock head %}
+
+{% block content %}
+    <article>
+        <div class="container center_content">
+            <div class="subtitle">
+                <h2 data-scroll-reveal="enter left and move 20px over 1s">学无止境</h2>
+                <p class="hidden-xs" data-scroll-reveal="enter bottom and move 20px over 1s">不要轻易放弃。学习成长的路上，我们长路漫漫，只因学无止境。</p>
+            </div>
+            <ul class="sort" data-scroll-reveal="enter bottom and move 20px over 1s after 0.5s">
+                <li>全部</li>
+                {% for t in list %}
+                    <li>{{ t }}</li>
+                {% endfor %}
+            </ul>
+
+            <ul class="tmtimeline">
+            </ul>
+
+            <div class="pages">
+                <a href="javascript:;">&lt;</a>
+                <a href="javascript:;">&gt;</a>
+            </div>
+        </div>
+    </article>
+{% endblock content %}

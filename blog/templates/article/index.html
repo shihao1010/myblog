@@ -1,0 +1,239 @@
+{% extends 'article/base.html' %}
+{% load static from staticfiles %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/echarts.common.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script>
+        $(function () {
+            $.ajaxSetup({cache:false});
+            go_to_page(1);
+            //选择所有的页码绑定点击事件
+            function page_click(){
+                $('.pages a:not(":first,:last")').click(function () {
+                    page_id=$(this).text();     //page_id为接下来要请求的页码号
+                    go_to_page(page_id);
+                });
+            }
+            function go_to_page(page_id) {      //ajax刷新当前页面文章   page_id为接下来要请求的页码号
+                $.ajax({
+                    type:'GET',
+                    data:{'page_id':page_id},
+                    url:'{% url 'article:pageAjax' %}',
+                    datatype:JSON,      //希望返回Json格式的数据
+                    success:function (data) {
+                        f1(data);     //处理返回后的数据
+                    },
+                    error:function () {
+                        console.log('ajax刷新分页数据失败！');
+                    }
+                })
+            }
+
+            function delHtmlTag(str){   //去掉html文本中所有的标签和空格还有回车，只保留数据,然后截取前95个字符
+                return $.trim(str.replace(/<[^>]+>/g,"").replace(/[\r\n]/g," ")).substr(0,95);
+            }
+
+
+            function f1(data) {   //处理返回后的数据    data为字符串型
+                data = $.parseJSON(data);    //将字符串型转化为object
+                //刷新文章
+                $('.tmtimeline li').remove();
+                for (var i = 0; i < data.result.length; i++) {
+
+                    $('.tmtimeline').append('<li><div class="row"><div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"> <time class="tmtime"> <span>'
+                        +data.result[i][0]+
+                        '</span> <span>'
+                        +data.result[i][1]+
+                        '</span> </time> <div class="tmicon"></div> </div> <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" data-scroll-reveal="enter right and move 50px over 1.2s"> <div class="tmlabel"> <h3>'
+                        +data.result[i][2]+
+                        '</h3> <div class="row"> <img src="/upload/'
+                        +data.result[i][3]+
+                        '" class="col-xs-4 img-responsive blogpic"> <div class="col-xs-8">'
+                        +delHtmlTag(data.result[i][4])+
+                        '...</div> </div> <a href="/detail/'
+                        +data.result[i][5]+
+                        '/" class="readmore">阅读全文&gt;&gt;</a> </div> </div> </div> </li>'
+                    );
+                }
+                //刷新页码
+                $('.pages a:not(":first,:last")').remove();
+                if(parseInt(data.num_pages) <= 5) {     //如果总页码数小于等于5
+                    for(var i=1;i<=parseInt(data.num_pages);i++){
+                        $('.pages a:last').before('<a href="javascript:;">' +i+ '</a>');
+                    }
+                }else if(parseInt(data.page_id)<=3){        //如果当前页码数小于等于3,显示前五页
+                    for(var i=1;i<=5;i++){
+                        $('.pages a:last').before('<a href="javascript:;">' +i+ '</a>');
+                    }
+                }else if(parseInt(data.page_id)>parseInt(data.num_pages)-2){    //当前页后面不足两页时
+                    for(var i=0;i<5;i++){
+                        $('.pages a:first').after('<a href="javascript:;">' +(parseInt(data.num_pages)-i)+ '</a>');
+                    }
+                }else{
+                    for(var i=-2;i<=2;i++){
+                        $('.pages a:last').before('<a href="javascript:;">' +(parseInt(data.page_id)+i)+ '</a>');
+                    }
+                }
+
+                $('.pages a:not(":first,:last")').each(function () {    //为当前页加上active
+                    if($(this).text()==data.page_id)
+                        $(this).addClass('active');
+                });
+
+                page_click();   //为刷新后的页码绑定点击事件
+                $('.pages a:first').unbind("click").click(function () {
+                    if(parseInt(data.page_id)<=1)
+                    {
+                        alert('已经是第一页');
+                    }
+                    else
+                    {
+                        go_to_page(parseInt(data.page_id)-1);
+                    }
+                });
+                $('.pages a:last').unbind("click").click(function () {
+                    if(parseInt(data.page_id)>=parseInt(data.num_pages))
+                        alert('已经是最后一页');
+                    else
+                        go_to_page(parseInt(data.page_id)+1);
+                });
+                scrollReveal.init();    //使用js动态写入的html,必须init初始化才能正常使用scrollReveal动画效果
+            }
+        })
+    </script>
+{% endblock head %}
+
+{% block content %}
+    <article>
+        <div class="container center_content">
+            <div class="row" data-scroll-reveal="enter left and move 20px over 1s">
+                <div class="col-xs-4">
+                    <a href="#"><img src="{% static 'images/anPic1.jpg' %}" class="img-responsive" alt="Responsive image"></a>
+                    <p>不管前方的路有多苦，只要走的方向正确，不管多么崎岖不平，都比站在原地更接近幸福。</p>
+                    <h3 class="text-right">——宫崎骏《千与千寻》</h3>
+                </div>
+                <div class="col-xs-4">
+                    <a href="#"><img src="{% static 'images/anPic2.jpg' %}" class="img-responsive" alt="Responsive image"></a>
+                    <div class="center_animition">
+                        <div class="panghu_moving"><img src="{% static 'images/zz.gif' %}" class="img-responsive"></div>
+                        <ul class="controlbox">
+                            <li class="glyphicon glyphicon-play"></li>
+                            <li class="glyphicon glyphicon-pause"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <a href="#"><img src="{% static 'images/anPic3.jpg' %}" class="img-responsive" alt="Responsive image"></a>
+                    <p>我不知道离别的滋味是这样凄凉，我不知道说声再见要这么坚强。</p>
+                    <h3 class="text-right">——宫崎骏《千与千寻》</h3>
+                </div>
+            </div>
+
+            <ul class="tmtimeline">
+                <div id="changeBox">
+                    <span class="glyphicon glyphicon-indent-left"></span>
+                </div>
+                <div class="container col-xs-12" id="pie"></div>
+            </ul>
+
+            <div class="pages">
+                <a href="javascript:;">&lt;</a>
+                <a href="javascript:;">&gt;</a>
+            </div>
+        </div>
+        <a href="javascript:;" class="totop"></a>
+    </article>
+
+    <script>
+        // 绘制图表。
+        var mychart = echarts.init(document.getElementById('pie'));
+        var option = ({         //图表样式
+           title: {
+               text: '文章统计',
+               subtext:'请点击',
+               x: 'center'
+           },
+           tooltip: {
+               trigger: 'item',
+               formatter: "{a} <br/>{b} : {c} ({d}%)"
+           },
+           legend: {
+               orient: 'vertical',
+               left: 'left',
+               itemWidth:80,
+               data: ['学无止境','慢生活']
+           },
+           series : [{
+               name: '分类占比',
+               type: 'pie',
+               radius : '55%',
+               center: ['50%', '45%'],
+               data:[]
+           }]
+        });
+        lifeOrStudy();      //刷新一级图表的数据
+        function lifeOrStudy(){
+            mychart.setOption(option);     //应用图表样式
+            $.get('chartInfo',function (data) {
+                data=$.parseJSON(data);
+                list=[];
+                var obj={value:data.studyCount,name:'学无止境'};
+                list.push(obj);
+                obj={value:data.lifeCount,name:'慢生活'};
+                list.push(obj);
+                mychart.setOption({
+                    series : [{
+                        data:list,
+                    }]
+                })
+            });
+        }
+
+        mychart.on('click',function (params) {      //一级图表点击事件
+            if (params.name=='慢生活' || params.name=='学无止境')
+            {
+                $.get('chartInfo',{'name':params.name},function (data) {
+                    {#mychart.setOption(option);#}
+                    data = $.parseJSON(data);    //将字符串型转化为object
+                    //处理数据
+                    var aList=[];      //图表里面legend的data数据
+                    var aList2=[];     //图标里面series的data数据
+                    for(var i=0; i<data.result.length; i++){
+                        aList.push(data.result[i][1]);
+                        var obj1={value:data.result[i][0],name:data.result[i][1]};
+                        aList2.push(obj1);
+                    }
+                    mychart.setOption({
+                        title: {
+                            text: data.name,
+                            subtext:'右键返回上级',
+                        },
+                        legend: {
+                            data: aList,
+                        },
+                        series : [{
+                           name: '分类占比',
+                           data:aList2,
+                        }]
+                    })
+                });
+            }else{
+                window.location.href={% url 'article:learn' %}+'?sort_name='+params.name;
+            }
+        });
+
+        //阻止浏览器默认右键点击事件
+        $("#pie").bind("contextmenu", function(){
+            return false;
+        });
+
+        //监听右键点击事件
+        $('#pie').mousedown(function (e) {
+           if(e.which==3){
+               lifeOrStudy();
+               return false;
+           }
+        });
+    </script>
+{% endblock content %}
