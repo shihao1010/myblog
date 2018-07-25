@@ -2,10 +2,13 @@ import json
 import markdown
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page	#缓存
 # Create your views here.
+
+#@cache_page(None)	#设置为了永久缓存，当首页修改时需要删除缓存
 def index(request):
     return render(request,'article/index.html')
 
@@ -115,4 +118,8 @@ def slowlife(request):
 
 def liuyan(request):
     return render(request,'article/liuyan.html')
+
+#404界面
+def page_not_found(request):
+    return render_to_response('404.html')
 
