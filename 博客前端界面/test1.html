@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+
+</head>
+<body>
+
+<canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+您的浏览器不支持 HTML5 canvas 标签。
+</canvas>
+111
+
+
+<script>
+    var c=document.getElementById("myCanvas");
+    var ctx=c.getContext("2d");
+    ctx.font="30px Arial";
+    var grd = ctx.createLinearGradient(0, 0, 300, 0);
+    grd.addColorStop("0", "#ff65b1");     //气泡颜色
+    grd.addColorStop("0.2","#7eff5a");
+    grd.addColorStop("0.4","#ff6f40");
+    grd.addColorStop("0.6","#dd43ff");
+    grd.addColorStop("0.8","#fff655");
+    grd.addColorStop("1","#4cd6ff");
+    ctx.fillStyle=grd;
+    ctx.fillText("Hello WorldHello WorldHello   ",0,30);
+</script>
+</body>
+
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网站名字</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="js/scrollReveal.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/echarts.common.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <style>
+      body {
+        /*background-color: #222;*/
+        /*overflow: hidden;*/
+        /*position: relative;*/
+      }
+      canvas {
+          background: url(images/touming.png);
+          position: fixed;
+      }
+  </style>
+
+</head>
+<body style="overflow-y:scroll">
+    <canvas id="canvas"></canvas>
+    <header>
+        <div class="container">
+            <div class="logo_title" data-scroll-reveal="enter right and move 20px over 1s">走在海边，走在月下</div>
+        </div>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" data-scroll-reveal="enter bottom and move 20px over 1s after 1s" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#index_menu" aria-expanded="false">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="index_menu">
+                    <ul class="nav navbar-nav" data-scroll-reveal="enter bottom and move 20px over 1s after 1s">
+                        <li><a href="index.html"><span>首页</span><span>Home</span></a></li>
+                        <li><a href="about.html"><span>关于我</span><span>About</span></a></li>
+                        <li><a href="learn.html"><span>学无止境</span><span>Learn</span></a></li>
+                        <li><a href="slowlife.html"><span>慢生活</span><span>Life</span></a></li>
+                        <li><a href="#"><span>留言</span><span>Saying</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <article>
+        <div class="container center_content">
+            <div class="row" data-scroll-reveal="enter left and move 20px over 1s">
+                <div class="col-xs-4">
+                    <a href="#"><img src="images/anPic1.jpg" class="img-responsive" alt="Responsive image"></a>
+                    <p>不管前方的路有多苦，只要走的方向正确，不管多么崎岖不平，都比站在原地更接近幸福。</p>
+                    <h3 class="text-right">——宫崎骏《千与千寻》</h3>
+                </div>
+                <div class="col-xs-4">
+                    <a href="#"><img src="images/anPic2.jpg" class="img-responsive" alt="Responsive image"></a>
+                    <div class="center_animition">
+                        <div class="panghu_moving"><img src="images/zz.gif" class="img-responsive"></div>
+                        <ul class="controlbox">
+                            <li class="glyphicon glyphicon-play"></li>
+                            <li class="glyphicon glyphicon-pause"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <a href="#"><img src="images/anPic3.jpg" class="img-responsive" alt="Responsive image"></a>
+                    <p>我不知道离别的滋味是这样凄凉，我不知道说声再见要这么坚强。</p>
+                    <h3 class="text-right">——宫崎骏《千与千寻》</h3>
+                </div>
+            </div>
+
+            <ul class="tmtimeline">
+                <div id="changeBox">
+                    <span class="glyphicon glyphicon-indent-left"></span>
+                </div>
+                <div class="container col-xs-12" id="pie"></div>
+                <li>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <time class="tmtime">
+                                <span>2017-9-29</span>
+                                <span>15:07:43</span>
+                            </time>
+                            <div class="tmicon"></div>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"  data-scroll-reveal="enter right and move 50px over 1.2s">
+                            <div class="tmlabel">
+                                <h3>结合豆瓣Api v2.0实现Jsonp跨域</h3>
+                                <div class="row">
+                                    <img src="images/ajax.jpg" class="col-xs-4 img-responsive blogpic">
+                                    <p class="col-xs-8">实现跨域请求，通过script标签实现跨域请求，在服务端输出JSON数据并执行回调函数，解决跨域的数据请求</p>
+                                </div>
+
+                                <a href="#" class="readmore">阅读全文&gt;&gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <time class="tmtime">
+                                <span>2017-9-29</span>
+                                <span>15:07:43</span>
+                            </time>
+                            <div class="tmicon"></div>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"  data-scroll-reveal="enter right and move 50px over 1.2s">
+                            <div class="tmlabel">
+                                <h3>结合豆瓣Api v2.0实现Jsonp跨域</h3>
+                                <div class="row">
+                                    <img src="images/css3.jpg" class="col-xs-4 img-responsive blogpic">
+                                    <p class="col-xs-8">实现跨域请求，通过script标签实现跨域请求，在服务端输出JSON数据并执行回调函数，解决跨域的数据请求</p>
+                                </div>
+                                <a href="#" class="readmore">阅读全文&gt;&gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <time class="tmtime">
+                                <span>2017-9-29</span>
+                                <span>15:07:43</span>
+                            </time>
+                            <div class="tmicon"></div>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"  data-scroll-reveal="enter right and move 50px over 1.2s">
+                            <div class="tmlabel">
+                                <h3>结合豆瓣Api v2.0实现Jsonp跨域</h3>
+                                <div class="row">
+                                    <img src="images/nodejs.jpg" class="col-xs-4 img-responsive blogpic">
+                                    <p class="col-xs-8">实现跨域请求，通过script标签实现跨域请求，在服务端输出JSON数据并执行回调函数，解决跨域的数据请求</p>
+                                </div>
+                                <a href="#" class="readmore">阅读全文&gt;&gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <time class="tmtime">
+                                <span>2017-9-29</span>
+                                <span>15:07:43</span>
+                            </time>
+                            <div class="tmicon"></div>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" data-scroll-reveal="enter right and move 50px over 1.2s">
+                            <div class="tmlabel">
+                                <h3>结合豆瓣Api v2.0实现Jsonp跨域</h3>
+                                <div class="row">
+                                    <img src="images/ajax.jpg" class="col-xs-4 img-responsive blogpic">
+                                    <p class="col-xs-8">实现跨域请求，通过script标签实现跨域请求，在服务端输出JSON数据并执行回调函数，解决跨域的数据请求</p>
+                                </div>
+                                <a href="#" class="readmore">阅读全文&gt;&gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="pages">
+                <li href="#">&lt;</li>
+                <li href="#" class="active">1</a>
+                <li href="#">2</li>
+                <li href="#">3</li>
+                <li href="#">&gt;</li>
+            </ul>
+        </div>
+    </article>
+
+    <span class="glyphicon glyphicon-volume-up" id="sound" title="点击关闭声音"></span>
+    <span class="glyphicon glyphicon-play" id="music"  title="点击开启音符"></span>
+    <a href="javascript:;" class="totop"></a>
+
+    <div class="container footer_href">
+        <div class="row">
+            <div class="col-sm-7 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-3">
+                        <h4>关于我</h4>
+                        <ul>
+                            <li><a href="https://github.com/shihao1010" target="_blank">github</a></li>
+                            <li><a href="https://blog.csdn.net/duke10" target="_blank">csdn</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-3">
+                        <h4>CDN资源库</h4>
+                        <ul>
+                            <li><a href="https://www.bootcdn.cn/" target="_blank">bootcdn</a></li>
+                            <li><a href="http://cdn.code.baidu.com/" target="_blank">baiducdn</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-3">
+                        <h4>常用教程</h4>
+                        <ul>
+                            <li><a href="http://www.w3school.com.cn/" target="_blank">w3school</a></li>
+                            <li><a href="http://www.runoob.com/" target="_blank">菜鸟教程</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-3">
+                        <h4>云服务器</h4>
+                        <ul>
+                            <li><a href="https://www.aliyun.com/product/ecs?spm=5176.10695662.744563.1.4b46700c6yzYOh" target="_blank">阿里云</a></li>
+                            <li><a href="https://cloud.tencent.com/product/cvm" target="_blank">腾讯云</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><span>Design by DanceSmile</span> 蜀ICP备17039017号</footer>
+    <script>
+        // 绘制图表。
+        var mychart = echarts.init(document.getElementById('pie'));
+        var option = ({
+           title: {
+               text: '文章统计',
+               subtext:'请点击',
+               x: 'center'
+           },
+           tooltip: {
+               trigger: 'item',
+               formatter: "{a} <br/>{b} : {c} ({d}%)"
+           },
+           legend: {
+               orient: 'vertical',
+               left: 'left',
+               itemWidth:80,
+               data: ['学无止境','慢生活']
+           },
+           series : [
+               {
+                   name: '分类占比',
+                   type: 'pie',
+                   radius : '55%',
+                   center: ['50%', '45%'],
+                   data:[
+                       {value:66.7, name:'学无止境'},
+                       {value:33.3, name:'慢生活'}
+                   ]
+               }
+           ]
+        });
+        mychart.setOption(option);
+
+        mychart.on('click',function (params) {
+            console.log(params.name);
+            if(params.name == '学无止境'){
+                mychart.setOption(option1);
+            }
+            if(params.name == '慢生活'){
+                mychart.setOption(option2);
+            }
+        });
+
+        //阻止浏览器默认右键点击事件
+        $("#pie").bind("contextmenu", function(){
+            return false;
+        });
+        $('#pie').mousedown(function (e) {
+           if(e.which==3){
+               mychart.setOption(option);
+               return false;
+           }
+        });
+
+        option1 = ({
+           title: {text: '学无止境',
+               subtext:'右键返回上级',
+               x: 'center'
+           },
+           tooltip: {
+               trigger: 'item',
+               formatter: "{a} <br/>{b} : {c} ({d}%)"
+           },
+           legend: {
+               orient: 'vertical',
+               left: 'left',
+               itemWidth:80,
+               data: ['ajax','css','nodejs','工具','javascript']
+           },
+           series : [
+               {
+                   name: '分类占比',
+                   type: 'pie',
+                   radius : '55%',
+                   center: ['50%', '45%'],
+                   data:[
+                       {value:25, name:'ajax'},
+                       {value:25, name:'css'},
+                       {value:12.5, name:'nodejs'},
+                       {value:25, name:'工具'},
+                       {value:12.5, name:'javascript'}
+                   ]
+               }
+           ]
+        });
+
+        option2 = ({
+           title: {
+               text: '慢生活',
+               subtext:'右键返回上级',
+               x: 'center'
+           },
+           tooltip: {
+               trigger: 'item',
+               formatter: "{a} <br/>{b} : {c} ({d}%)"
+           },
+           legend: {
+               orient: 'vertical',
+               left: 'left',
+               itemWidth:80,
+               data: ['书籍推荐','生活杂记']
+           },
+           series : [
+               {
+                   name: '分类占比',
+                   type: 'pie',
+                   radius : '55%',
+                   center: ['50%', '45%'],
+                   data:[
+                       {value:50, name:'书籍推荐'},
+                       {value:50, name:'生活杂记'}
+                   ]
+               }
+           ]
+        });
+    </script>
+
+    <!--必须加上-->
+    <script>
+        if (!(/msie [6|7|8|9]/i.test(navigator.userAgent))){
+            (function(){
+                window.scrollReveal = new scrollReveal({reset: true});
+            })();
+        }
+    </script>
+
+    <script src='js/222.js'></script>
+    <script  src="js/canvas_index.js"></script>
+</body>
+</html>
