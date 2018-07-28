@@ -1,3 +1,5 @@
+博客地址为：http://www.shihao.online/
+
 个人博客知识分享，自己用django搭建的个人博客
 
 前端界面由html,css,js,bootstrap完成
