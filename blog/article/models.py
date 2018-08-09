@@ -20,7 +20,7 @@ class Category(models.Model):
 
 #文章标签
 class Tag(models.Model):
-    tname=models.CharField(verbose_name='标签',unique=True,max_length=15) #标签名字
+    tname=models.CharField(verbose_name='标签',unique=True,max_length=30) #标签名字
     isShow=models.BooleanField(verbose_name='是否显示',default=True)     #是否显示，默认显示
     class Meta:
         verbose_name = '文章标签'
@@ -44,4 +44,23 @@ class Article(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.title
+
+#访问网站的ip地址和次数
+class Userip(models.Model):
+    ip=models.CharField(verbose_name='IP地址',max_length=30)    #ip地址
+    count=models.IntegerField(verbose_name='访问次数',default=0) #该ip访问次数
+    class Meta:
+        verbose_name = '访问用户信息'
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.ip
+
+#网站总访问次数
+class VisitNumber(models.Model):
+    count=models.IntegerField(verbose_name='网站访问总次数',default=0) #网站访问总次数
+    class Meta:
+        verbose_name = '网站访问总次数'
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return str(self.count)
 

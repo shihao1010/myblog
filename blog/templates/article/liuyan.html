@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <p>界面还在开发中，集成的第三方评论，还在审核</p>
-</body>
-</html>
+{% extends 'article/base.html' %}
+{% load static from staticfiles %}
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/learn.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slowlife.css' %}">
+    <script type="text/javascript" src="{% static 'js/learn.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+    <article>
+        <div class="container center_content">
+            <div class="subtitle">
+                <h2 data-scroll-reveal="enter left and move 20px over 1s">留言板</h2>
+                <p class="hidden-xs" data-scroll-reveal="enter bottom and move 20px over 1s">你，生命中最重要的过客，之所以是过客，因为你未曾为我停留。</p>
+            </div>
+
+            <!--PC和WAP自适应版-->
+			<div id="SOHUCS" sid="0"></div>
+			<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+			<script type="text/javascript">
+			window.changyan.api.config({
+			appid: 'cytJLH20I',
+			conf: 'prod_74acafd9ecea9fa452826132116b06eb'
+			});
+			</script>
+
+        </div>
+    </article>
+{% endblock content %}

@@ -1,15 +1,18 @@
 import json
 import markdown
+import re
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render,render_to_response
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page	#缓存
+from .visit_info import change_info     #当网站被访问时，更新网站访问次数
 # Create your views here.
 
 #@cache_page(None)	#设置为了永久缓存，当首页修改时需要删除缓存
 def index(request):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     return render(request,'article/index.html')
 
 #点击下一页时使用ajax局部刷新页面内容
@@ -20,12 +23,12 @@ def pageAjax(request):
         sort_name=request.GET.get('sort_name')
         if sort_name and sort_name != '全部':     #判断分类
             category=Category.objects.get(cname=sort_name)
-            article=Article.objects.filter(category=category).order_by('-id')
+            article=Article.objects.filter(category=category,isShow=True).order_by('-id')
         else:
             # article=Article.objects.all() 用.all这种获取方法没什么大问题
             # 将所有对象取出，而没有指定顺序，这就使得会出现：
             # UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list
-            article=Article.objects.all().order_by('-id')  #获取所有博客
+            article=Article.objects.filter(isShow=True).order_by('-id')  #获取所有博客
         paginator=Paginator(article,4)        #分页，每页显示8篇文章
         page_list=paginator.page(int(page_id)).object_list     #获得要返回的页面的文章列表
 
@@ -56,13 +59,19 @@ def pageAjax(request):
         return HttpResponse(json.dumps(context))    #json.dumps(context)是字符串类型
 
 def detail(request,id):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     article=Article.objects.get(id=int(id))     #获取文章
-    article.content = markdown.markdown(article.content,extensions=[
+    article.clickNums=article.clickNums+1       #增加访问次数
+    article.save()
+    article.content = markdown.markdown(article.content.replace("\r\n", '  \n'),extensions=[
                                      'markdown.extensions.extra',
                                      'markdown.extensions.codehilite',
                                      'markdown.extensions.toc',
                                   ])
-    context={'article':article}
+    meta_category=article.category
+    meta_description=re.sub(r'<[^>]+>', "",article.content, re.S)[:80]      #去掉html标签，并截取前80个字符
+    # print(meta_description)
+    context={'article':article,'meta_description':meta_description,'meta_category':meta_category}
     return render(request,'article/detail.html',context)
 
 def chartInfo(request):     #饼图ajax请求数据
@@ -99,9 +108,11 @@ def chartInfo(request):     #饼图ajax请求数据
         return HttpResponse(json.dumps(context))
 
 def about(request):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     return render(request,'article/about.html')
 
 def learn(request):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     if request.GET.get('sort_name'):
         sort_name=request.GET.get('sort_name')
     else:
@@ -114,12 +125,20 @@ def learn(request):
     return render(request,'article/learn.html',context)
 
 def slowlife(request):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     return render(request,'article/slowlife.html')
 
 def liuyan(request):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     return render(request,'article/liuyan.html')
 
 #404界面
 def page_not_found(request):
+    change_info(request)     #当网站被访问时，更新网站访问次数
     return render_to_response('404.html')
+
+#sitemap
+def sitemap(request):
+    return render(request,'sitemap.xml',content_type="application/xml")
+
 

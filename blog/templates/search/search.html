@@ -1,0 +1,94 @@
+{% extends 'article/base.html' %}
+{% load static from staticfiles %}
+{% load highlight %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/learn.css' %}">
+    <script type="text/javascript" src="{% static 'js/learn.js' %}"></script>
+    <script>
+        $(function () {
+            {#$('.tmlabel p').each(function () {#}
+            {#    $(this).text(delHtmlTag($(this).text()));#}
+            {#function delHtmlTag(str){   //去掉html文本中所有的标签和空格还有回车，只保留数据,然后截取前95个字符#}
+            {#    return $.trim(str.replace(/<[^>]+>/g,"").replace(/[\r\n]/g," ")).substr(0,95);#}
+            if($('.first_page')){
+                $('.first_page').click(function () {
+                    alert('已经是第一页！');
+                })
+            };
+            if($('.last_page')){
+                $('.last_page').click(function () {
+                    alert('已经是最后一页！');
+                })
+            }
+            scrollReveal.init();    //使用js动态写入的html,必须init初始化才能正常使用scrollReveal动画效果
+        })
+    </script>
+    <style>
+        .empty{
+            font-size: 20px;
+            text-align: center;
+        }
+        .highlighted{
+            color: #666;
+        }
+    </style>
+{% endblock head %}
+
+{% block content %}
+    <article>
+        <div class="container center_content">
+            <div class="subtitle">
+                <h2 data-scroll-reveal="enter left and move 20px over 1s">搜索结果为</h2>
+                <p class="hidden-xs" data-scroll-reveal="enter bottom and move 20px over 1s">不要轻易放弃。学习成长的路上，我们长路漫漫，只因学无止境。</p>
+            </div>
+
+            <ul class="tmtimeline">
+                {% for array in results %}
+                    <li>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <time class="tmtime">
+                                    <span>{{ array.time }}</span>
+                                    <span>{{ array.time1 }}</span>
+                                </time>
+                                <div class="tmicon"></div>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"  data-scroll-reveal="enter right and move 50px over 1s">
+                                <div class="tmlabel">
+                                    <h3>{{ array.title }}</h3>
+                                    <div class="row">
+                                        <img src="/media/{{ array.pic }}" class="col-xs-4 img-responsive blogpic">
+                                        <p class="col-xs-8">
+{#                                            {{ array.content }}#}
+                                            {% highlight array.content with query  [max_length 100] %}
+                                        </p>
+                                    </div>
+
+                                    <a href="/detail/{{ array.id }}/" class="readmore">阅读全文&gt;&gt;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% empty %}
+                    <p class="empty">未搜索到与{{ query }}相关的文章</p>
+                {% endfor %}
+            </ul>
+
+             {% if page.has_previous or page.has_next %}
+                <div class="pages">
+                    {% if page.has_previous %}
+                        <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">&lt;</a>
+                    {% else %}
+                        <a href="#" class="first_page">&lt;</a>
+                    {% endif %}
+
+                    {% if page.has_next %}
+                        <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">&gt;</a>
+                    {% else %}
+                        <a href="#" class="last_page">&gt;</a>
+                    {% endif %}
+                </div>
+             {% endif %}
+        </div>
+    </article>
+{% endblock content %}

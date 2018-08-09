@@ -20,6 +20,16 @@ body{
     margin-left: 30px;
 }
 
+#index_menu .form-control{
+    background-color: #FAF8E7;
+}
+
+#index_menu .btn-default{
+    background-color:#FAF8E7;
+    /*opacity: 0.3;*/
+    color:#666;
+}
+
 #index_menu a{
     font-size: 18px;
     font-weight: bold;
@@ -604,6 +614,14 @@ footer{
     bottom:50px;
     display:none;
 }
+
+/*大于1200px生效*/
+@media (min-width: 1200px) {
+    .container {
+        width:1000px;
+    }
+}
+
 
 /*小于992px生效*/
 @media(max-width: 992px){

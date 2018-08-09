@@ -3,6 +3,7 @@ from django.urls import include
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+from . import search_views
 
 app_name='article'
 urlpatterns = [
@@ -14,4 +15,6 @@ urlpatterns = [
     url(r'^learn/$',views.learn,name='learn'),
     url(r'^slowlife/$',views.slowlife,name='slowlife'),
     url(r'^liuyan/$',views.liuyan,name='liuyan'),
+    url(r'^search/', search_views.MySeachView(), name='haystack_search'),
+    url(r'^sitemap\.xml$', views.sitemap, name='sitemap'),
 ]

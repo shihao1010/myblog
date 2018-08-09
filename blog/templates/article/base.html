@@ -3,11 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-	<meta name="keywords" content="博客，前端, django, python, js, html, css, jq， bootstrap,nginx,uwsgi,echarts" />   <!--用户告诉搜索引擎你的网页关键字是什么-->
-    <meta name="description" content="个人博客知识分享 django搭建的个人博客 前端界面由html,css,js,bootstrap完成，后台为django，数据库为mysql，同时使用redis数据库做缓存，网站引入了echarts饼图和markdown编辑器，部署在阿里云，部署方式为nginx+uwsgi" />      <!--网站内容描述，用来告诉搜索引擎你网站的主要内容-->
+    <meta name="baidu-site-verification" content="RdmyDyqUQF" />
+    <meta name="sogou_site_verification" content="qLiE3IBX95"/>
+    <meta name="360-site-verification" content="5d0353840bd91c62a99cc567e229dcf3" />
+     <meta name="keywords" content="{{ meta_category|default:'博客，前端, django, python, js, html, css, jq， bootstrap,nginx,uwsgi,echarts' }}" />   <!--用户告诉搜索引擎你的网页关键字是什么-->
+    <meta name="description" id="description" content="{{ meta_description|default:'个人博客知识分享 django搭建的个人博客 前端界面由html,css,js,bootstrap完成，后台为django，数据库为mysql，同时使用redis数据库做缓存，网站引入了echarts饼图和markdown编辑器，部署在阿里云，部署方式为nginx+uwsgi' }}" />      <!--网站内容描述，用来告诉搜索引擎你网站的主要内容-->
     <meta name="author" content="史浩" />         <!--标注网页的作者-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>十号的博客</title>
+    <title>{{ article.title|default:'史浩的博客' }}</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="icon" href="{% static 'images/7.ico' %}" type="image/x-icon" />
     
@@ -18,6 +21,21 @@
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery.cookie/1.4.1/jquery.cookie.min.js"></script>
+     <!-- 百度自动推送 -->
+	<script>
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
 
     {#    <script type="text/javascript" src="{% static 'js/scrollReveal.js' %}"></script>#}
     {#    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">#}
@@ -42,21 +60,27 @@
                     </button>
                 </div>
                 <div class="collapse navbar-collapse" id="index_menu">
-                    <ul class="nav navbar-nav" data-scroll-reveal="enter bottom and move 20px over 1s after 1s">
+                    <ul class="nav navbar-nav" data-scroll-reveal="enter bottom and move 20px over 0.7s after 0.3s">
                         <li><a href="{% url 'article:index' %}"><span>首页</span><span>Home</span></a></li>
                         <li><a href="{% url 'article:about' %}"><span>关于我</span><span>About</span></a></li>
                         <li><a href="{% url 'article:learn' %}"><span>学无止境</span><span>Learn</span></a></li>
                         <li><a href="{% url 'article:slowlife' %}"><span>慢生活</span><span>Life</span></a></li>
                         <li><a href="{% url 'article:liuyan' %}"><span>留言</span><span>Saying</span></a></li>
-						<li><a href="/admin"><span>管理</span><span>Admin</span></a></li>
+						<li><a href="/admin" target="_blank"><span>管理</span><span>Admin</span></a></li>
                     </ul>
+                    <form class="navbar-form navbar-right" method='get' action="/search/" id="search">
+                        <div class="form-group">
+                            <input type="text" name="q" class="form-control" placeholder="搜索文章">
+                        </div>
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </form>
                 </div>
             </div>
         </nav>
     </header>
 
-	<span class="glyphicon glyphicon-volume-up" id="sound" title="点击关闭声音"></span>
-    <span class="glyphicon glyphicon-play" id="music"  title="点击开启音符"></span>
+	<!-- <span class="glyphicon glyphicon-volume-up" id="sound" title="点击关闭声音"></span> -->
+    <!-- <span class="glyphicon glyphicon-play" id="music"  title="点击开启音符"></span> -->
 	<a href="javascript:;" class="totop"></a>
     {% block content %}{% endblock content%}
 
@@ -96,7 +120,19 @@
             </div>
         </div>
     </div>
-    <footer>备案号：*********</footer>
+ 	<footer class="footer11"><a href='http://www.miibeian.gov.cn/' target="_blank">豫ICP备18027620号</a></footer>
+
+    <script>
+        $(function () {
+            $('#search button').click(function () {
+                if(!$('#search input').val()){      //如果没有输入值的话
+                    alert('必须输入关键字才能搜索！！！');
+                    return false;
+                }
+                $('form').submit();
+            })
+        })
+    </script>
 
     <!--创建一个scrollReveal对象  必须加上-->
     <script>
@@ -106,7 +142,7 @@
             })();
         }
     </script>
-    <script src="{% static 'js/222.js' %}"></script>
-    <script  src="{% static 'js/canvas_index.js' %}"></script>
+    <!-- <script src="{% static 'js/222.js' %}"></script> -->
+    <!-- <script  src="{% static 'js/canvas_index.js' %}"></script> -->
 </body>
 </html>

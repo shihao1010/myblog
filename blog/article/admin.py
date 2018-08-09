@@ -20,15 +20,32 @@ class ArticleAdmin(admin.ModelAdmin):
     )
 
 class CategoryAdmin(admin.ModelAdmin):
+    list_per_page = 20              #admin中每页放多少条数据
     list_display = ['id','cname','lifeOrStudy','isShow']
     ordering = ('id', 'cname')
     search_fields = ['cname']  # 搜索框（只有Charfield可以搜索）
     list_filter = ['lifeOrStudy']  # 搜索框（只有Charfield可以搜索）
 
 class TagAdmin(admin.ModelAdmin):
+    list_per_page = 20              #admin中每页放多少条数据
     list_display = ['id', 'tname', 'isShow']
     ordering = ('id', 'tname')
+
+class TagAdmin(admin.ModelAdmin):
+    list_per_page = 20              #admin中每页放多少条数据
+    list_display = ['id', 'tname', 'isShow']
+    ordering = ('id', 'tname')
+
+class UseripAdmin(admin.ModelAdmin):
+    list_per_page = 20              #admin中每页放多少条数据
+    list_display = ['id','ip','count']
+    ordering = ('id','count')
+
+class VisitNumberAdmin(admin.ModelAdmin):
+    list_display = ['id','count']
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag,TagAdmin)
+admin.site.register(Userip,UseripAdmin)
+admin.site.register(VisitNumber,VisitNumberAdmin)
