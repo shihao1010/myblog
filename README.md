@@ -16,7 +16,11 @@
 项目使用方式：
 
 1：将项目下载到本地，创建django虚拟环境
+
 2：创建数据库blog，将blog.sql导入（这是我的数据，可以做实验用）
+
 3：激活虚拟环境，安装所需的包（在plist.txt中），可使用pip install -r plist.txt安装
+
 4：创建超级管理员python manage.py createsuperuser
+
 5：python manage.py runserver
