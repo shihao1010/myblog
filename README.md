@@ -21,7 +21,22 @@
 
 3：激活虚拟环境，安装所需的包（在plist.txt中），可使用pip install -r plist.txt安装
 
-4：
+4：修改一些haystack的配置(haystack是用来全文检索的），需要修改一些东西才可以使用
+
+	1：在虚拟环境中找到venv/lib/python3.5/site-packages/haystack/backends（这是我的路径，不知道其他的是不是，就那么几个文件夹，可以找找）
+
+	2：将ChineseAnalyzer.py拷贝到该目录下（该文件在github项目上有）
+
+	3：复制whoosh_backend.py文件，改名为whoosh_cn_backend.py
+
+	4：在whoosh_cn_backend.py中开始位置添加from .ChineseAnalyzer import ChineseAnalyzer 
+	然后查找
+
+	analyzer=StemmingAnalyzer()
+
+	改为
+
+	analyzer=ChineseAnalyzer()
 
 5：创建超级管理员python manage.py createsuperuser
 
