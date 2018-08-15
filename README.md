@@ -13,7 +13,7 @@
 源码在上面，喜欢的给个星
 
 
-项目使用方式：
+项目使用方式（如果需要在本地运行实验的话）：
 
 1：将项目下载到本地，创建django虚拟环境
 
@@ -21,6 +21,8 @@
 
 3：激活虚拟环境，安装所需的包（在plist.txt中），可使用pip install -r plist.txt安装
 
-4：创建超级管理员python manage.py createsuperuser
+4：
 
-5：python manage.py runserver
+5：创建超级管理员python manage.py createsuperuser
+
+6：python manage.py runserver
