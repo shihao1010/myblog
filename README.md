@@ -1,10 +1,13 @@
 <h1>一个使用django开发的个人博客</h1>
 
-<h2>开发环境如下：</h2>
+<h3>开发环境如下：</h3>
 
 1：开发系统：linux（这个对项目没什么太大影响，个人习惯写项目用linux）
+
 2：开发语言：python3+django2
+
 3：数据库：mysql
+
 4：IDE：pycharm
 
 博客地址为：http://www.shihao.online/
