@@ -461,6 +461,9 @@ body{
 
 .tmlabel .row div{
     width: 50%;
+    word-wrap:break-word;
+    word-break:break-all;
+    overflow: hidden;
 }
 
 /*每个li左上角的小三角*/

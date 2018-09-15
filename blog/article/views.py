@@ -6,11 +6,11 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render,render_to_response
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import cache_page	#缓存
+from django.views.decorators.cache import cache_page    #缓存
 from .visit_info import change_info     #当网站被访问时，更新网站访问次数
 # Create your views here.
 
-#@cache_page(None)	#设置为了永久缓存，当首页修改时需要删除缓存
+#@cache_page(None)  #设置为了永久缓存，当首页修改时需要删除缓存
 def index(request):
     change_info(request)     #当网站被访问时，更新网站访问次数
     return render(request,'article/index.html')
@@ -20,15 +20,7 @@ def index(request):
 def pageAjax(request):
     if request.method=='GET':
         page_id=request.GET.get('page_id')
-        sort_name=request.GET.get('sort_name')
-        if sort_name and sort_name != '全部':     #判断分类
-            category=Category.objects.get(cname=sort_name)
-            article=Article.objects.filter(category=category,isShow=True).order_by('-id')
-        else:
-            # article=Article.objects.all() 用.all这种获取方法没什么大问题
-            # 将所有对象取出，而没有指定顺序，这就使得会出现：
-            # UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list
-            article=Article.objects.filter(isShow=True).order_by('-id')  #获取所有博客
+        article=Article.objects.filter(isShow=True).order_by('-id')  #获取所有博客
         paginator=Paginator(article,4)        #分页，每页显示8篇文章
         page_list=paginator.page(int(page_id)).object_list     #获得要返回的页面的文章列表
 
@@ -42,11 +34,14 @@ def pageAjax(request):
             array.append(time1)
             array.append(p.title)
             array.append(str(p.pic))
-            array.append(markdown.markdown(p.content, extensions=[    #把所有的content都传过去，在js中去掉html标签，空格换行，并截取前80个字符
+            temp = markdown.markdown(p.content, extensions=[    #把所有的content都传过去，在js中去掉html标签，空格换行，并截取前80个字符
                 'markdown.extensions.extra',
                 'markdown.extensions.codehilite',
                 'markdown.extensions.toc',
-            ]))
+            ])
+            dr = re.compile(r'<[^>]+>', re.S)
+            temp = dr.sub('', temp).replace('\n', "").replace(' ', '')
+            array.append(temp[0:95])
             array.append(p.id)  #文章的id
             result.append(array)
             array=[]
@@ -54,7 +49,6 @@ def pageAjax(request):
             'result':result,
             'page_id':page_id,      #当前页面
             'num_pages':paginator.num_pages,    #页面总数
-            'sort_name':sort_name,
         }
         return HttpResponse(json.dumps(context))    #json.dumps(context)是字符串类型
 
@@ -70,7 +64,6 @@ def detail(request,id):
                                   ])
     meta_category=article.category
     meta_description=re.sub(r'<[^>]+>', "",article.content, re.S)[:80]      #去掉html标签，并截取前80个字符
-    # print(meta_description)
     context={'article':article,'meta_description':meta_description,'meta_category':meta_category}
     return render(request,'article/detail.html',context)
 
@@ -78,17 +71,17 @@ def chartInfo(request):     #饼图ajax请求数据
     if request.GET.get('name'):     #加载二级图表
         name=request.GET.get('name')
         t1=Category.objects.get(id=1)
-        CategoryList=Category.objects.filter(lifeOrStudy=name)  #获取类别
+        CategoryList=Category.objects.filter(lifeOrStudy=name).order_by('id')  #获取类别
         list1=[]
         result=[]
         for t in CategoryList:
             count=t.article_set.all().count()
             list1.append(count)
             list1.append(t.cname)
+            list1.append(t.id)
             result.append(list1)
             list1=[]
         context={'result':result,'name':name}
-        print(name)
         return HttpResponse(json.dumps(context))
     else:    #加载一级图表
         lifeList = Category.objects.filter(lifeOrStudy='慢生活')
@@ -111,17 +104,48 @@ def about(request):
     change_info(request)     #当网站被访问时，更新网站访问次数
     return render(request,'article/about.html')
 
-def learn(request):
+def learn(request,category_id,page_id):
     change_info(request)     #当网站被访问时，更新网站访问次数
-    if request.GET.get('sort_name'):
-        sort_name=request.GET.get('sort_name')
+    category_id=int(category_id)
+    page_id=int(page_id)
+    if category_id == 0:
+        article = Article.objects.filter(isShow=True).order_by('-id')
     else:
-        sort_name='全部'
-    category=Category.objects.all()
-    list=[]
-    for t in category:
-        list.append(t.cname)
-    context={'list':list,'sort_name':sort_name}
+        category = Category.objects.get(id=category_id)
+        article = Article.objects.filter(category=category, isShow=True).order_by('-id')
+    category_list=Category.objects.all()
+
+    paginator = Paginator(article, 6)  # 分页，每页显示6篇文章
+    page_list = paginator.page(page_id).object_list  # 获得要返回的页面的文章列表
+
+    # 处理要返回的数据
+    result = []
+    array = []
+    for p in page_list:
+        time = p.createTime.strftime('%Y-%m-%d')  # 年月日
+        time1 = p.createTime.strftime('%H:%M:%S')  # 时分秒
+        array.append(time)
+        array.append(time1)
+        array.append(p.title)
+        array.append(str(p.pic))
+        temp = markdown.markdown(p.content, extensions=[  # 把所有的content都传过去，在js中去掉html标签，空格换行，并截取前80个字符
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+        dr = re.compile(r'<[^>]+>', re.S)
+        temp = dr.sub('', temp).replace('\n', "").replace(' ', '')
+        array.append(temp[0:130])
+        array.append(p.id)  # 文章的id
+        result.append(array)
+        array = []
+    context = {  # 字典类型
+        'result': result,
+        'page_id': page_id,  # 当前页面
+        'num_pages': paginator.num_pages,  # 页面总数
+        'category_list': category_list,
+        'category_id':category_id,
+    }
     return render(request,'article/learn.html',context)
 
 def slowlife(request):

@@ -52,30 +52,6 @@
     opacity: 1;
 }
 
-.sort li:nth-child(1) {
-    background: #F65087;
-}
-
-.sort li:nth-child(2) {
-    background: #329768;
-}
-
-.sort li:nth-child(3) {
-    background: #FB8052;
-}
-
-.sort li:nth-child(4) {
-    background: #3693CA;
-}
-
-.sort li:nth-child(5) {
-    background: #68C999;;
-}
-
-.sort li:nth-child(6) {
-    background: #109691;
-}
-
 .tmtimeline{
     left: -30px;
 }

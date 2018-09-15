@@ -29,11 +29,6 @@
                 })
             }
 
-            function delHtmlTag(str){   //去掉html文本中所有的标签和空格还有回车，只保留数据,然后截取前95个字符
-                return $.trim(str.replace(/<[^>]+>/g,"").replace(/[\r\n]/g," ")).substr(0,95);
-            }
-
-
             function f1(data) {   //处理返回后的数据    data为字符串型
                 data = $.parseJSON(data);    //将字符串型转化为object
                 //刷新文章
@@ -49,7 +44,7 @@
                         '</h3> <div class="row"> <img src="/media/'
                         +data.result[i][3]+
                         '" class="col-xs-4 img-responsive blogpic"> <div class="col-xs-8">'
-                        +delHtmlTag(data.result[i][4])+
+                        +data.result[i][4]+
                         '...</div> </div> <a href="/detail/'
                         +data.result[i][5]+
                         '/" class="readmore">阅读全文&gt;&gt;</a> </div> </div> </div> </li>'
@@ -141,9 +136,7 @@
                 <a href="javascript:;">&gt;</a>
             </div>
         </div>
-        <a href="javascript:;" class="totop"></a>
     </article>
-
 
     <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts-en.common.min.js"></script>
 
@@ -207,7 +200,7 @@
                         var aList2=[];     //图标里面series的data数据
                         for(var i=0; i<data.result.length; i++){
                             aList.push(data.result[i][1]);
-                            var obj1={value:data.result[i][0],name:data.result[i][1]};
+                            var obj1={value:data.result[i][0],name:data.result[i][1],id:data.result[i][2]};
                             aList2.push(obj1);
                         }
                         mychart.setOption({
@@ -225,7 +218,7 @@
                         })
                     });
                 }else{
-                    window.location.href={% url 'article:learn' %}+'?sort_name='+params.name;
+                    window.location.href='/learn/'+params.data.id+'/1/';
                 }
             });
 

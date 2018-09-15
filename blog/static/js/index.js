@@ -19,17 +19,5 @@ $(function () {
         else {
             $('#changeBox').css({opacity:0});
         }
-	if (nowTop>400) {
-            $('.totop').fadeIn(1000);
-        }
-        else{
-            $('.totop').fadeOut(1000);
-        }
-    });
-
-    $('.totop').click(function(){
-        //animate不只可以加css属性
-        //html和body都写是为了兼容性
-        $('html,body').animate({scrollTop:0});
     });
 });

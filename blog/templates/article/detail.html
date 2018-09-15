@@ -20,7 +20,8 @@
             <h3 data-scroll-reveal="enter right and move 20px over 1s">
                 <span>您现在的位置是&gt;</span>
                 <a href="/">首页</a>&gt;
-                <a href="{% url 'article:learn' %}">学无止境</a>&gt;
+                <a href="/learn/0/1/">学无止境</a>&gt;
+                <a href="/learn/{{ meta_category.id }}/1">{{ meta_category.cname }}</a>&gt;
                 <a href="/detail/{{ article.id }}">{{ article.title }}</a>
             </h3>
             <div class="detail_content">{{ article.content|safe }}</div>
